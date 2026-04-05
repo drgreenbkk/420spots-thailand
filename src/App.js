@@ -143,7 +143,7 @@ export default function App() {
       m.on('click', () => { setSelected(spot); map.flyTo([spot.lat, spot.lng], Math.max(map.getZoom(), 13), { duration:0.7 }); });
       markersRef.current.push(m);
     });
-  }, [filtered, selected]);
+  }, [filtered]);
 
   useEffect(() => { msgEnd.current?.scrollIntoView({ behavior:'smooth' }); }, [msgs]);
 
