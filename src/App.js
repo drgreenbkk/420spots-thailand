@@ -192,13 +192,11 @@ export default function App() {
 
   // ── AI send ────────────────────────────────────────────────────────────────
   try {
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
+      const r = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
+          
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
