@@ -192,19 +192,18 @@ export default function App() {
 
   // ── AI send ────────────────────────────────────────────────────────────────
   try {
-      const r = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: `You are the AI guide for 420 Spots Thailand. Be chill, concise, helpful. Use emojis sparingly. Cannabis is legal medicinally in Thailand.\n\nSpots:\n${ctx}`,
-          messages: next.map(m => ({ role: m.role, content: m.content })),
-        }),
-      });
+ const r = await fetch('/api/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000,
+    system: `You are the AI guide for 420 Spots Thailand. Be chill, concise, helpful. Use emojis sparingly. Cannabis is legal medicinally in Thailand.\n\nSpots:\n${ctx}`,
+    messages: next.map(m => ({ role: m.role, content: m.content })),
+  }),
+});
       const d = await r.json();
       console.log('AI response:', d);
       if (d.content?.[0]?.text) {
