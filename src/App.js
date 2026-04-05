@@ -191,16 +191,7 @@ export default function App() {
   }, []);
 
   // ── AI send ────────────────────────────────────────────────────────────────
-  const sendAI = async () => {
-    if (!aiInput.trim() || aiLoading) return;
-    const txt = aiInput.trim();
-    setAiInput('');
-    const next = [...msgs, { role:'user', content:txt }];
-    setMsgs(next);
-    setAiLoading(true);
-    const ctx = spots.map(s => `${s.name} (${s.city}) — ${s.type} ★${s.rating}. ${s.description}`).join('\n');
-    const key = apiKey || localStorage.getItem('420_api_key') || '';
-    try {
+  try {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -217,12 +208,15 @@ export default function App() {
         }),
       });
       const d = await r.json();
-      setMsgs(p => [...p, { role:'assistant', content: d.content?.[0]?.text || 'Try again 🙏' }]);
-    } catch {
-      setMsgs(p => [...p, { role:'assistant', content:'Connection error — check your API key 🔑' }]);
+      console.log('AI response:', d);
+      if (d.content?.[0]?.text) {
+        setMsgs(p => [...p, { role:'assistant', content: d.content[0].text }]);
+      } else {
+        setMsgs(p => [...p, { role:'assistant', content: `Error: ${JSON.stringify(d)}` }]);
+      }
+    } catch (err) {
+      setMsgs(p => [...p, { role:'assistant', content: `Error: ${err.message}` }]);
     }
-    setAiLoading(false);
-  };
 
   // ── Submit new spot ────────────────────────────────────────────────────────
   const submitSpot = () => {
